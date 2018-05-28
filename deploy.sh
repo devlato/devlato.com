@@ -3,7 +3,7 @@
 export HEAD_COMMIT=$TRAVIS_COMMIT
 export SSHPASS=$SSH_PASS
 
-export BUILD_ROOT=$( realpath ./build )
+export BUILD_ROOT=$( pwd )/build
 export RELEASE_DIR=$BUILD_ROOT/release-$HEAD_COMMIT
 export VERSION_FILE=$RELEASE_DIR/version.txt
 export LOCAL_ARCHIVE=$BUILD_ROOT/release-$HEAD_COMMIT.zip
