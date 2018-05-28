@@ -1,0 +1,15 @@
+language: node_js
+install:
+- apt-get install -y sshpass zip curl git
+script:
+- git ls-files | xargs zip ./.build/build.zip unzip
+- sshpass -p "$SSH_PASS" scp -rf ./.build/build.zip $SSH_USER@$SSH_HOST:/tmp/build.zip
+- sshpass -p "$SSH_PASS" ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST unzip /tmp/build.zip -d $SERVER_ROOT
+- rm -rf ./build/build.zip
+after_script:
+- curl -X GET $SSH_HOST_URL/index.html
+deploy:
+  provider: script
+  on:
+    tags: true
+    repo: devlato/devlato.com
