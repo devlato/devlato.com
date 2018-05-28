@@ -43,13 +43,13 @@ zip -r $LOCAL_ARCHIVE .
 cd -
 
 echo -e \\nCopying the archive to the remote host...
-sshpass -ve scp -vr $LOCAL_ARCHIVE $SSH_USER@$SSH_HOST:$REMOTE_ARCHIVE
+sshpass -e scp -vr $LOCAL_ARCHIVE $SSH_USER@$SSH_HOST:$REMOTE_ARCHIVE
 
 echo -e \\nExtracting the files from the archive...
-sshpass -ve ssh -v $SSH_USER@$SSH_HOST unzip -o $REMOTE_ARCHIVE -d $SERVER_ROOT
+sshpass -e ssh -v $SSH_USER@$SSH_HOST unzip -o $REMOTE_ARCHIVE -d $SERVER_ROOT
 
 echo -e \\nRemoving the remote archive...
-sshpass -ve ssh -v $SSH_USER@$SSH_HOST rm -rf $REMOTE_ARCHIVE
+sshpass -e ssh -v $SSH_USER@$SSH_HOST rm -rf $REMOTE_ARCHIVE
 
 echo -e \\nRemoving the build directory...
 rm -rf $BUILD_ROOT
