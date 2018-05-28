@@ -12,7 +12,7 @@ script:
 deploy:
   provider: script
   script:
-    bash ./deploy.sh
+    bash -e ./deploy.sh
   on:
     branch: master
     repo: devlato/devlato.com

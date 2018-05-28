@@ -1,35 +1,57 @@
 #!/usr/bin/env bash
 
-export SSHPASS=$SSH_PASS
-export BUILD_DIR=./.build
-export VERSION_FILE=$BUILD_DIR/version.txt
-export LOCAL_ARCHIVE=$BUILD_DIR/release.zip
-export REMOTE_ARCHIVE=/tmp/release.zip
-
 export HEAD_COMMIT=$TRAVIS_COMMIT
+export SSHPASS=$SSH_PASS
 
-echo Creating the build directory...
-mkdir -p $BUILD_DIR
+export BUILD_ROOT=$( realpath ./build )
+export RELEASE_DIR=$BUILD_ROOT/release-$HEAD_COMMIT
+export VERSION_FILE=$RELEASE_DIR/version.txt
+export LOCAL_ARCHIVE=$BUILD_ROOT/release-$HEAD_COMMIT.zip
+export REMOTE_ARCHIVE=/tmp/release-$HEAD_COMMIT.zip
 
-echo Copying files to the build directory...
-git ls-files | xargs -IFILE bash -c 'export file=FILE; mkdir -p build/$( dirname $file ); cp -R $file build/$file'
+echo -e \\nInitialized with variables:
+echo HEAD_COMMIT=$HEAD_COMMIT
+echo BUILD_ROOT=$BUILD_ROOT
+echo RELEASE_DIR=$RELEASE_DIR
+echo VERSION_FILE=$VERSION_FILE
+echo LOCAL_ARCHIVE=$LOCAL_ARCHIVE
+echo REMOTE_ARCHIVE=$REMOTE_ARCHIVE
+echo SERVER_ROOT=$SERVER_ROOT
+echo SSH_USER=$SSH_USER
+echo SSH_HOST=$SSH_HOST
 
-echo Generating the local version file...
-echo $HEAD_COMMIT > $VERSION_FILE
+echo -e \\nRemoving the previous build directory...
+rm -rf $RELEASE_DIR
 
-echo Creating the archive...
-zip -r $LOCAL_ARCHIVE $BUILD_DIR
+echo -e \\nCreating the build directory...
+mkdir -p $RELEASE_DIR
 
-echo Copying the archive to the remote host...
-sshpass -e scp -vr $LOCAL_ARCHIVE $SSH_USER@$SSH_HOST:$REMOTE_ARCHIVE
+echo -e \\nCopying files to the build directory...
+git ls-files | \
+xargs -IFILE bash -c '\
+  export file=FILE; \
+  mkdir -p $RELEASE_DIR/$( dirname $file ); \
+  cp -R $file $RELEASE_DIR/$file\
+'
 
-echo Extracting the files from the archive...
-sshpass -e ssh -v SSH_USER@$SSH_HOST unzip $REMOTE_ARCHIVE -d $SERVER_ROOT
+echo -e \\nGenerating the local version file...
+echo -n $HEAD_COMMIT > $VERSION_FILE
 
-echo Removing the remove archive...
-sshpass -e ssh -v SSH_USER@$SSH_HOST rm -rf $REMOTE_ARCHIVE
+echo -e \\nCreating the archive...
+cd $RELEASE_DIR
+zip -r $LOCAL_ARCHIVE .
+cd -
 
-echo Removing the build directory...
-rm -rf $BUILD_DIR
+echo -e \\nCopying the archive to the remote host...
+sshpass -ve scp -vr $LOCAL_ARCHIVE $SSH_USER@$SSH_HOST:$REMOTE_ARCHIVE
 
-echo Done.
+echo -e \\nExtracting the files from the archive...
+sshpass -ve ssh -v $SSH_USER@$SSH_HOST unzip -o $REMOTE_ARCHIVE -d $SERVER_ROOT
+
+echo -e \\nRemoving the remote archive...
+sshpass -ve ssh -v $SSH_USER@$SSH_HOST rm -rf $REMOTE_ARCHIVE
+
+echo -e \\nRemoving the build directory...
+rm -rf $BUILD_ROOT
+
+echo -e \\nDone.
