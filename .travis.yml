@@ -14,7 +14,7 @@ deploy:
   script:
     bash ./deploy.sh
   on:
-    tags: true
+    branch: master
     repo: devlato/devlato.com
 notifications:
   email:
