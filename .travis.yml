@@ -6,7 +6,7 @@ script:
 - git --version
 - sshpass -V
 - zip --version
-- unzip --version
+- unzip  -version
 - curl --version
 - git ls-files
 deploy:
