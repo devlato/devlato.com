@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: 
+Disallow: /.well-known/
+Disallow: /.private
+Disallow: /private
+Sitemap: https://devlato.com/sitemap.xml
+

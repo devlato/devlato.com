@@ -1,0 +1,21 @@
+{
+    "name": "@devlato's home page",
+    "short_name": "The home page and a the blog of @devlato",
+    "icons": [
+        {
+            "src": "/images/favicons/android-chrome-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/images/favicons/android-chrome-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#86b1f5",
+    "background_color": "#86b1f5",
+    "start_url": "https://devlato.com",
+    "display": "standalone",
+    "orientation": "portrait"
+}

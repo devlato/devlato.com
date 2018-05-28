@@ -1,4 +1,4 @@
-devlato.com
-===========
+# Personal page
 
-devlato.com with subservices
+[devlato.com](https://devlato.com)
+
