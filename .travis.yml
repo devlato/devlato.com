@@ -1,6 +1,6 @@
 language: node_js
-install:
-- apt-get install -y sshpass zip curl git
+before_install:
+- sudo apt-get install -y sshpass zip curl git
 deploy:
   provider: script
   script:
