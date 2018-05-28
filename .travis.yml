@@ -1,5 +1,6 @@
 language: node_js
-before_install:
+sudo: enabled
+install:
 - sudo apt-get install -y sshpass zip curl git
 script:
 - git --version
@@ -15,3 +16,9 @@ deploy:
   on:
     tags: true
     repo: devlato/devlato.com
+notifications:
+  email:
+    recipients:
+      - $NOTIFICATION_EMAIL
+    on_success: always
+    on_failure: always
