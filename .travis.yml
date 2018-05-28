@@ -16,9 +16,11 @@ deploy:
   on:
     branch: master
     repo: devlato/devlato.com
+after_deploy:
+- curl -X GET $HEALTHCHECK_URL
 notifications:
   email:
     recipients:
-      - $NOTIFICATION_EMAIL
+      - github@devlato.com
     on_success: always
     on_failure: always
