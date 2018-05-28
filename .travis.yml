@@ -18,6 +18,15 @@ deploy:
     repo: devlato/devlato.com
 after_deploy:
 - curl -X GET $HEALTHCHECK_URL
+- |
+  if [[ $( curl -X GET $VERSION_URL ) == $TRAVIS_COMMIT ]];
+  then
+    echo Version matches
+    exit 0
+  else
+    echo Version does not match
+    exit 1
+  fi
 notifications:
   email:
     recipients:
